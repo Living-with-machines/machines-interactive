@@ -31,7 +31,7 @@ function _3(d3, Highcharts, width, selectedData) {
     },
 
     chart: {
-      height: 800,
+      height: 600,
       width,
       events: {
         load: function () {
