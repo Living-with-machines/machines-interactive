@@ -4,12 +4,6 @@ function _1(breadCrumb) {
   )
 }
 
-function _2(backToStart) {
-  return (
-    backToStart()
-  )
-}
-
 function _breadCrumb(html) {
   return (
     ({
@@ -23,7 +17,7 @@ function _breadCrumb(html) {
   )
 }
 
-function _4(width, d3, svg, height, ukIreland, turf, geocodedPlaces, Event, DEBUG, $0, html, location, url) {
+function _3(width, d3, svg, height, ukIreland, turf, geocodedPlaces, Event, DEBUG, $0, html, location, url) {
   const margin = { top: 0, left: -width / 2, right: 0, bottom: 0 }
   const latCrop = [49, 57.4];
   const lonCrop = [-15, 2]; // [-7.6, 1.8];
@@ -161,7 +155,6 @@ function _4(width, d3, svg, height, ukIreland, turf, geocodedPlaces, Event, DEBU
       if (DEBUG) {
         $0.value = html`<a href="${_url}">Link</a>`
       } else {
-        console.log(_url)
         location.href = _url;
       }
     })
@@ -169,6 +162,12 @@ function _4(width, d3, svg, height, ukIreland, turf, geocodedPlaces, Event, DEBU
   return SVG.node()
 }
 
+
+function _4(backToStart) {
+  return (
+    backToStart()
+  )
+}
 
 function _url(DEBUG, html) {
   return (
@@ -223,9 +222,9 @@ export default function define(runtime, observer) {
   ]);
   main.builtin("FileAttachment", runtime.fileAttachments(name => fileAttachments.get(name)));
   main.variable(observer()).define(["breadCrumb"], _1);
-  main.variable(observer()).define(["backToStart"], _2);
   main.variable(observer("breadCrumb")).define("breadCrumb", ["html"], _breadCrumb);
-  main.variable(observer()).define(["width", "d3", "svg", "height", "ukIreland", "turf", "geocodedPlaces", "Event", "DEBUG", "mutable url", "html", "location", "url"], _4);
+  main.variable(observer()).define(["width", "d3", "svg", "height", "ukIreland", "turf", "geocodedPlaces", "Event", "DEBUG", "mutable url", "html", "location", "url"], _3);
+  main.variable(observer()).define(["backToStart"], _4);
   main.define("initial url", ["DEBUG", "html"], _url);
   main.variable(observer("mutable url")).define("mutable url", ["Mutable", "initial url"], (M, _) => new M(_));
   main.variable(observer("url")).define("url", ["mutable url"], _ => _.generator);
