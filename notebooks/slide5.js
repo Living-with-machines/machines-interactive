@@ -91,10 +91,16 @@ function _4(backToStart) {
   )
 }
 
-async function _selectedData(FileAttachment, decade) {
-  const data = await FileAttachment("wordcloudData.json").json();
+function _top() {
+  return (
+    75
+  )
+}
 
-  const d = data.byDecade[decade].slice(0, 250)
+async function _selectedData(FileAttachment, top, decade) {
+  const data = await FileAttachment("wordcloudData@1.json").json();
+
+  const d = top ? data.byDecade[decade].slice(0, top) : data.byDecade[decade].slice(0, 250);
 
   return d
     .filter(d => d)
@@ -129,7 +135,7 @@ function _decadeSelector(html) {
 
 function _wordcloudData(FileAttachment) {
   return (
-    FileAttachment("wordcloudData.json").json()
+    FileAttachment("wordcloudData@1.json").json()
   )
 }
 
@@ -139,7 +145,7 @@ function _breadCrumb(html) {
       active = ""
     } = {}) => html`<nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="slide2.html">Explore sample data</a></li>
+      <li class="breadcrumb-item"><a href="#slide2">Explore sample data</a></li>
       <li class="breadcrumb-item active" aria-current="page">${active}</li>
     </ol>
   </nav>`
@@ -149,12 +155,12 @@ function _breadCrumb(html) {
 function _backToStart(html) {
   return (
     () => html`<footer class="mt-auto">
-    <p><a class="me-4 btn btn btn-warning rounded-4 shadow" href="slide2.html">Back to start</a></p>
+    <p><a class="me-4 btn btn btn-warning rounded-4 shadow" href="#slide2">Back to start</a></p>
   </footer>`
   )
 }
 
-function _10(htl) {
+function _11(htl) {
   return (
     htl.html`<style>
   .highcharts-color-0,
@@ -185,7 +191,7 @@ export default function define(runtime, observer) {
   const main = runtime.module();
   function toString() { return this.url; }
   const fileAttachments = new Map([
-    ["wordcloudData.json", { url: new URL("./files/b69156545887e657c70d26ec89cc6df450a301f82c6b66b6b57708b59f0895dde3e7ca6c55bc81ccab770511b309709d90c97e886153f065ad270b48968aac1e.json", import.meta.url), mimeType: "application/json", toString }]
+    ["wordcloudData@1.json", { url: new URL("./files/fe74ff9ae8418bbd4cf8aba05aec06597cee54a95d23a5cb9123ffa6d2800a45df67211a5b5740a03872a3cd5ecadda73b3c43e4ded0a8267cc2e88f8e0f995b.json", import.meta.url), mimeType: "application/json", toString }]
   ]);
   main.builtin("FileAttachment", runtime.fileAttachments(name => fileAttachments.get(name)));
   main.variable(observer()).define(["breadCrumb"], _1);
@@ -193,12 +199,13 @@ export default function define(runtime, observer) {
   main.variable(observer("decade")).define("decade", ["Generators", "viewof decade"], (G, _) => G.input(_));
   main.variable(observer()).define(["d3", "Highcharts", "width", "selectedData"], _3);
   main.variable(observer()).define(["backToStart"], _4);
-  main.variable(observer("selectedData")).define("selectedData", ["FileAttachment", "decade"], _selectedData);
+  main.variable(observer("top")).define("top", _top);
+  main.variable(observer("selectedData")).define("selectedData", ["FileAttachment", "top", "decade"], _selectedData);
   main.variable(observer("decadeSelector")).define("decadeSelector", ["html"], _decadeSelector);
   main.variable(observer("wordcloudData")).define("wordcloudData", ["FileAttachment"], _wordcloudData);
   main.variable(observer("breadCrumb")).define("breadCrumb", ["html"], _breadCrumb);
   main.variable(observer("backToStart")).define("backToStart", ["html"], _backToStart);
-  main.variable(observer()).define(["htl"], _10);
+  main.variable(observer()).define(["htl"], _11);
   main.variable(observer("Highcharts")).define("Highcharts", ["require"], _Highcharts);
   return main;
 }
