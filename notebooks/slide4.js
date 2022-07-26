@@ -1,6 +1,9 @@
-function _1(breadCrumb, place) {
+function _1(breadCrumb, place, correctCase) {
   return (
-    breadCrumb({ active: "Machines in a place", place })
+    breadCrumb({
+      active: "Machines in a place",
+      place: place.match(/[a-z]/g).length === place.length ? correctCase[place] : place
+    })
   )
 }
 
@@ -34,7 +37,7 @@ function _place(wordcloudData, Inputs, html, d3, Event) {
 }
 
 
-function _3(d3, Highcharts, width, selectedData) {
+function _3(d3, Highcharts, selectedData, html) {
   const elem = d3.create("div").attr("id", "wordcloud-container").node()
 
   Highcharts.seriesTypes.wordcloud.prototype.deriveFontSize = function (relativeWeight) {
@@ -56,7 +59,7 @@ function _3(d3, Highcharts, width, selectedData) {
 
     chart: {
       height: 600,
-      width,
+      width: 1000,
       events: {
         load: function () {
           var allSeries = this.series,
@@ -105,13 +108,19 @@ function _3(d3, Highcharts, width, selectedData) {
   })
 
 
-  return elem
+  return html`
+    <div class="card">
+      <div class="card-body">
+        ${elem}
+      </div>
+    </div>
+  `
 }
 
 
-function _4(backToStart) {
+function _4(backToMap) {
   return (
-    backToStart()
+    backToMap()
   )
 }
 
@@ -121,8 +130,8 @@ function _top() {
   )
 }
 
-async function _selectedData(FileAttachment, place, top, wordcloudData) {
-  const data = await FileAttachment("wordcloudData@1.json").json();
+async function _selectedData(FileAttachment, place, top, wordcloudData, correctCase) {
+  const data = await FileAttachment("wordcloudData@2.json").json();
 
   let d = undefined
   if (place === "all") {
@@ -130,9 +139,9 @@ async function _selectedData(FileAttachment, place, top, wordcloudData) {
   } else {
     d = top && data.byPlace[place] ? data.byPlace[place].slice(0, top) : data.byPlace[place];
     if (!d) {
-      const found = Object.keys(wordcloudData.byPlace).filter(d => d.toLowerCase().replace(/ /g, "-") === place)
+      const found = wordcloudData.byPlace[correctCase[place]]
       if (found) {
-        d = top ? data.byPlace[found[0]].slice(0, top) : data.byPlace[found[0]];
+        d = found;
       }
     }
   }
@@ -143,10 +152,10 @@ async function _selectedData(FileAttachment, place, top, wordcloudData) {
 }
 
 
-function _backToStart(html) {
+function _backToMap(html) {
   return (
     () => html`<footer class="mt-auto">
-    <p><a class="me-4 btn btn btn-warning rounded-4 shadow" href="#slide2">Back to start</a></p>
+    <p><a class="me-4 btn btn btn-warning rounded-4 shadow" href="slide3.html">Back to map</a></p>
   </footer>`
   )
 }
@@ -154,19 +163,27 @@ function _backToStart(html) {
 function _breadCrumb(html) {
   return (
     ({
-      active = ""
+      active = "",
+      place
     } = {}) => html`<nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="#slide2">Explore sample data</a></li>
-      <li class="breadcrumb-item active" aria-current="page">${active}</li>
+      <li class="breadcrumb-item"><a href="slide2.html">Explore sample data</a></li>
+      <li class="breadcrumb-item" aria-current="page">${active}</li>
+      <li class="breadcrumb-item active" aria-current="page">${place === "all" ? "All places" : place}</li>
     </ol>
   </nav>`
   )
 }
 
+function _correctCase(wordcloudData) {
+  return (
+    Object.fromEntries(Object.keys(wordcloudData.byPlace).map(d => [d.toLowerCase().replace(/-/, ""), d]))
+  )
+}
+
 function _wordcloudData(FileAttachment) {
   return (
-    FileAttachment("wordcloudData@1.json").json()
+    FileAttachment("wordcloudData@2.json").json()
   )
 }
 
@@ -178,43 +195,24 @@ async function _Highcharts(require) {
 }
 
 
-function _11(htl) {
-  return (
-    htl.html`<style>
-  .highcharts-color-0,
-  .highcharts-color-1,
-  .highcharts-color-2,
-  .highcharts-color-3,
-  .highcharts-color-4,
-  .highcharts-color-5,
-  .highcharts-color-6,
-  .highcharts-color-7,
-  .highcharts-color-8,
-  .highcharts-color-9 {
-    fill: black !important;
-  }
-  </style>`
-  )
-}
-
 export default function define(runtime, observer) {
   const main = runtime.module();
   function toString() { return this.url; }
   const fileAttachments = new Map([
-    ["wordcloudData@1.json", { url: new URL("./files/fe74ff9ae8418bbd4cf8aba05aec06597cee54a95d23a5cb9123ffa6d2800a45df67211a5b5740a03872a3cd5ecadda73b3c43e4ded0a8267cc2e88f8e0f995b.json", import.meta.url), mimeType: "application/json", toString }]
+    ["wordcloudData@2.json", { url: new URL("./files/31a0e37c393584e5af93abf7abfd4e9be47eb19e8e9a14baa01c1abee16e293a3622c12abe4ebe6e74943d8a128bbcd5e9cb0871922c919d347fa20d76571d9c.json", import.meta.url), mimeType: "application/json", toString }]
   ]);
   main.builtin("FileAttachment", runtime.fileAttachments(name => fileAttachments.get(name)));
-  main.variable(observer()).define(["breadCrumb", "place"], _1);
+  main.variable(observer()).define(["breadCrumb", "place", "correctCase"], _1);
   main.variable(observer("viewof place")).define("viewof place", ["wordcloudData", "Inputs", "html", "d3", "Event"], _place);
   main.variable(observer("place")).define("place", ["Generators", "viewof place"], (G, _) => G.input(_));
-  main.variable(observer()).define(["d3", "Highcharts", "width", "selectedData"], _3);
-  main.variable(observer()).define(["backToStart"], _4);
+  main.variable(observer()).define(["d3", "Highcharts", "selectedData", "html"], _3);
+  main.variable(observer()).define(["backToMap"], _4);
   main.variable(observer("top")).define("top", _top);
-  main.variable(observer("selectedData")).define("selectedData", ["FileAttachment", "place", "top", "wordcloudData"], _selectedData);
-  main.variable(observer("backToStart")).define("backToStart", ["html"], _backToStart);
+  main.variable(observer("selectedData")).define("selectedData", ["FileAttachment", "place", "top", "wordcloudData", "correctCase"], _selectedData);
+  main.variable(observer("backToMap")).define("backToMap", ["html"], _backToMap);
   main.variable(observer("breadCrumb")).define("breadCrumb", ["html"], _breadCrumb);
+  main.variable(observer("correctCase")).define("correctCase", ["wordcloudData"], _correctCase);
   main.variable(observer("wordcloudData")).define("wordcloudData", ["FileAttachment"], _wordcloudData);
   main.variable(observer("Highcharts")).define("Highcharts", ["require"], _Highcharts);
-  main.variable(observer()).define(["htl"], _11);
   return main;
 }

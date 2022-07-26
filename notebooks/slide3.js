@@ -4,21 +4,8 @@ function _1(breadCrumb) {
   )
 }
 
-function _breadCrumb(html) {
-  return (
-    ({
-      active = ""
-    } = {}) => html`<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="slide2.html">Explore sample data</a></li>
-      <li class="breadcrumb-item active" aria-current="page">${active}</li>
-    </ol>
-  </nav>`
-  )
-}
-
-function _3(width, d3, svg, height, ukIreland, turf, geocodedPlaces, Event, DEBUG, $0, html, location, url) {
-  const margin = { top: 0, left: -width / 2, right: 0, bottom: 0 }
+function _2(d3, svg, width, height, ukIreland, turf, geocodedPlaces, Event, DEBUG, $0, html, location) {
+  const margin = { top: 0, left: -100, right: 0, bottom: 0 } // -width / 2
   const latCrop = [49, 57.4];
   const lonCrop = [-15, 2]; // [-7.6, 1.8];
 
@@ -159,13 +146,32 @@ function _3(width, d3, svg, height, ukIreland, turf, geocodedPlaces, Event, DEBU
       }
     })
 
-  return SVG.node()
+  return html`
+    <div class="card">
+      <div class="card-body p-0">
+        ${SVG.node()}
+      </div>
+    </div>`;
 }
 
 
-function _4(backToStart) {
+function _3(backToStart) {
   return (
     backToStart()
+  )
+}
+
+function _breadCrumb(html) {
+  return (
+    ({
+      active = ""
+    } = {}) => html`<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="slide2.html">Explore sample data</a></li>
+      <li class="breadcrumb-item" aria-current="page">Machines in a place</li>
+      <li class="breadcrumb-item active" aria-current="page">${active}</li>
+    </ol>
+  </nav>`
   )
 }
 
@@ -222,9 +228,9 @@ export default function define(runtime, observer) {
   ]);
   main.builtin("FileAttachment", runtime.fileAttachments(name => fileAttachments.get(name)));
   main.variable(observer()).define(["breadCrumb"], _1);
+  main.variable(observer()).define(["d3", "svg", "width", "height", "ukIreland", "turf", "geocodedPlaces", "Event", "DEBUG", "mutable url", "html", "location"], _2);
+  main.variable(observer()).define(["backToStart"], _3);
   main.variable(observer("breadCrumb")).define("breadCrumb", ["html"], _breadCrumb);
-  main.variable(observer()).define(["width", "d3", "svg", "height", "ukIreland", "turf", "geocodedPlaces", "Event", "DEBUG", "mutable url", "html", "location", "url"], _3);
-  main.variable(observer()).define(["backToStart"], _4);
   main.define("initial url", ["DEBUG", "html"], _url);
   main.variable(observer("mutable url")).define("mutable url", ["Mutable", "initial url"], (M, _) => new M(_));
   main.variable(observer("url")).define("url", ["mutable url"], _ => _.generator);
