@@ -128,7 +128,7 @@ async function _selectedData(FileAttachment, place, top, wordcloudData) {
   if (place === "all") {
     d = top ? data.all.slice(0, top) : data.all.slice(0, 500);
   } else {
-    d = top ? data.byPlace[place].slice(0, top) : data.byPlace[place];
+    d = top && data.byPlace[place] ? data.byPlace[place].slice(0, top) : data.byPlace[place];
     if (!d) {
       const found = Object.keys(wordcloudData.byPlace).filter(d => d.toLowerCase().replace(/ /g, "-") === place)
       if (found) {
