@@ -1,18 +1,66 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<title>Machines in a place</title>
-<link rel="stylesheet" type="text/css" href="./style/inspector.css">
-<link rel="stylesheet" type="text/css" href="./bootstrap-5.2.0-dist/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="./style/exhibition.css">
+
+<head>
+    <title>TITLE</title>
+    <link rel="stylesheet" type="text/css" href="./static/style/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="./static/style/exhibition.css">
+</head>
+
 
 <body>
+    <div class="slide">
+        <div name="crumb"></div>
+        <div name="viewof place"></div>
+        <div name="dataFrame"></div>
+        <div name="toMap"></div>
+    </div>
+
+    <script src="./static/modules/htl.js"></script>
+    <script src="./static/modules/d3.js"></script>
+    <script src="./static/modules/d3-selection.js"></script>
+    <script src="./static/modules/highcharts.js"></script>
+    <script src="./static/modules/wordcloud.js"></script>
+    <script src="./static/modules/inputs.js"></script>
+
     <script type="module">
 
-        import define from "./slide4.js";
-        import { Runtime, Library, Inspector } from "./core/runtime.js";
+        import { Runtime, Library, Inspector } from "./static/core/runtime.js";
+        import notebook from "./slide4/9e39c41960fbda2a@374.js";
 
-        const runtime = new Runtime();
-        const main = runtime.module(define, Inspector.into(document.querySelector("div.slide")));
+        const runtime = new Runtime(
+            new Library(name => {
+                console.log("library:", name)
+                switch (name) {
+                    case "d3": return d3;
+                    case "d3-selection@2": return d3;
+                    // case "d3-array@3": return d3;
+                    case "@observablehq/inputs@0.10.4": return Inputs;
+                    case "highcharts@10.2.0": return Highcharts;
+                    case "highcharts@10.2.0/modules/wordcloud.js": return Highcharts;
+                    case "htl@0.3.1": return htl;
+                    case "@observablehq/inputs": return Inputs;
+                }
+            })
+        );
+
+        // Show the output of the “chart” and “viewof replay” cells in the DIV elements
+        // with the corresponding name.
+        const main = runtime.module(notebook, name => {
+            console.log("cell name:", name)
+            if (["crumb", "viewof place", "dataFrame", "toMap"].includes(name)) {
+                return new Inspector(document.querySelector(`[name='${name}']`));
+            }
+        });
+
+        // Redefine the “data” cell to use our CSV file (in the same format).
+        // main.redefine("data", d3.csv("./cities.csv", d3.autoType));
+
+        // Redefine the “k” cell to disable tweening between keyframes. (This dataset is
+        // already interpolated.)
+        // main.redefine("k", 1);
 
     </script>
-    <div class="slide d-flex align-items-end"></div>
+</body>
+
+</html>
