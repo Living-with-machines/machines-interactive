@@ -1,5 +1,8 @@
 name: Make machines interactive
-on: [push]
+on:
+  push:
+    branches:
+      - main
 jobs:
   Make:
     runs-on: ubuntu-latest
@@ -16,6 +19,6 @@ jobs:
         env:
           REPO: self
           BRANCH: build # The branch name where you want to push the assets
-          FOLDER: ./ # The directory where your assets are generated
+          FOLDER: ${{ github.workspace }} # The directory where your assets are generated
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
           MESSAGE: "Build: ({sha})" # The commit message
