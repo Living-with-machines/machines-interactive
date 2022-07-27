@@ -1,4 +1,4 @@
-Machines interactive
+[Machines interactive
 ===============
 
 This is the “machines interactive” for the _Living with Machines_ exhibit at Leeds City Museum 2022–23.
@@ -50,3 +50,4 @@ $ npx http-server --port 80
 ```
 
 4. Navigate to [localhost](http://localhost) (or 127.0.0.1) in your browser.
+](https://datatofish.com/add-python-to-windows-path/)
