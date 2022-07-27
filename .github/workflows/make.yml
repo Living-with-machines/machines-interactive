@@ -1,0 +1,12 @@
+name: Make machines interactive
+on: [push]
+jobs:
+  Make:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 A new machines interactive has been pushed."
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: chmod +x "${github.workspace}/setup.sh"
+      - run: setup.sh
+      - run: ${{ github.workspace }}
