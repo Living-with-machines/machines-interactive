@@ -6,29 +6,25 @@ This is the “machines interactive” for the _Living with Machines_ exhibit at
 To run the kiosk using Python
 ---------------
 
+_Prerequisites:_ Note that for this option, you need to have Python 3.7 or above installed, you must have made the correct settings to run `python3` using the `python` command in the PATH (otherwise, you could just switch `python` for `python3` above). If you need installation instructions for how to install and setup Python 3 this way, Lisa Tagliaferri’s instructions are recommended, whether you work on [macOS](https://www.digitalocean.com/community/tutorials/how-to-install-python-3-and-set-up-a-local-programming-environment-on-macos), [Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-install-python-3-and-set-up-a-programming-environment-on-an-ubuntu-20-04-server) or [Windows 10](https://www.digitalocean.com/community/tutorials/how-to-install-python-3-and-set-up-a-local-programming-environment-on-windows-10).
+
 1. Run the build command:
 
 ```sh
 $ bash build.sh
 ```
 
-2. Navigate into the `build` folder:
+2. Run the following command to get a local web server running on port 80:
 
 ```sh
-$ cd build
+$ python -m http.server 80 --directory build
 ```
 
-3. Run the command:
+_Note: If you run into problem with a busy or blocked port, you can change the port (80) to any random number here._
 
-```sh
-$ python -m http.server 80
-```
+3. Navigate to [localhost](http://localhost) (or 127.0.0.1) in your browser.
 
-_Prerequisites:_ Note that this means Python 3.7 or above must be installed, you must have made the correct settings to run `python3` using the `python` command (otherwise, you could just switch `python` for `python3` above). If you need installation instructions for how to install Python 3 this way, Lisa Tagliaferri’s instructions are recommended, either for [macOS](https://www.digitalocean.com/community/tutorials/how-to-install-python-3-and-set-up-a-local-programming-environment-on-macos), [Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-install-python-3-and-set-up-a-programming-environment-on-an-ubuntu-20-04-server) or [Windows 10](https://www.digitalocean.com/community/tutorials/how-to-install-python-3-and-set-up-a-local-programming-environment-on-windows-10).
-
-You should now have a local web server running on port 80, which means that you can:
-
-4. Navigate to [localhost](http://localhost) (or 127.0.0.1) in your browser.
+_Note: If you changed the port above, you will need to follow “localhost” with `:PORT` for whichever port number you chose above._
 
 To run the kiosk using NodeJS
 ---------------
