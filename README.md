@@ -1,6 +1,8 @@
 Machines interactive
 ===============
 
+![https://doi.org/10.5281/zenodo.13940337](https://zenodo.org/badge/DOI/10.5281/zenodo.13940337.svg)
+
 This is the “machines interactive” for the _Living with Machines_ exhibit at Leeds City Museum 2022–23.
 
 See also the [“accidents interactive”](https://github.com/Living-with-machines/accidents-interactive) for the same exhibition.
